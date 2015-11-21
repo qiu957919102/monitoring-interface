@@ -143,10 +143,14 @@
 		transform-origin left center
 		transform rotate(0deg)
 		
-	// styles for stuck items
+	// styles for hanged & stuck items
+	&.hanged
+		.percentage
+			color $error
+		.progress .active, .progress .active2
+			background $error
 	&.stuck
 		.percentage
 			color $warning
 		.progress .active, .progress .active2
 			background $warning
-				

@@ -145,6 +145,13 @@
   transform-origin: left center;
   transform: rotate(0deg);
 }
+.progress-bar.hanged .percentage {
+  color: $error;
+}
+.progress-bar.hanged .progress .active,
+.progress-bar.hanged .progress .active2 {
+  background: $error;
+}
 .progress-bar.stuck .percentage {
   color: $warning;
 }

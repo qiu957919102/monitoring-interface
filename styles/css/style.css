@@ -212,6 +212,9 @@ body {
   width: 100%;
   padding: 15px 30px 15px 100px;
 }
+a {
+  cursor: pointer;
+}
 .icon-menu {
   float: right;
   font-size: 18px;
@@ -244,7 +247,7 @@ body {
   text-decoration: none;
   margin: 2px 0 2px -86px;
   padding-top: 20px;
-  padding-left: 10px;
+  padding-left: 8px;
   -webkit-transition: 1s;
   -moz-transition: 1s;
   -ms-transition: 1s;
@@ -463,12 +466,19 @@ body {
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
 }
-.progress-bar.stuck .percentage {
+.progress-bar.hanged .percentage {
   color: #f95c5c;
+}
+.progress-bar.hanged .progress .active,
+.progress-bar.hanged .progress .active2 {
+  background: #f95c5c;
+}
+.progress-bar.stuck .percentage {
+  color: #fa9400;
 }
 .progress-bar.stuck .progress .active,
 .progress-bar.stuck .progress .active2 {
-  background: #f95c5c;
+  background: #fa9400;
 }
 #history-page {
   display: none;

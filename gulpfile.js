@@ -1,12 +1,15 @@
 var gulp = require('gulp'),
 	stylus = require('gulp-stylus'),
 	watch = require('gulp-watch'),
-	minifyCss = require('gulp-minify-css');
+	minifyCss = require('gulp-minify-css'),
+    react = require('gulp-react')
+;
 
 var paths = {
 	scripts: ['./js/*.js'],
 	stylus: './styles/styl/*.styl',
-	css: './styles/css/style.css'
+	css: './styles/css/style.css',
+    react: './jsx/*.jsx'
 };
 
 
@@ -22,8 +25,15 @@ gulp.task('minify-css', function() {
     .pipe(gulp.dest('./'));
 });
 
+gulp.task('react', function () {
+    return gulp.src(paths.react)
+        .pipe(react())
+        .pipe(gulp.dest('./js'));
+});
+
 gulp.task('watch', function() {
     gulp.watch(paths.stylus, ['stylus']);
+    gulp.watch(paths.react, ['react']);
     gulp.watch(paths.css, ['minify-css']);
     gulp.watch(paths.scripts);
 });

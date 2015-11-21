@@ -12,3 +12,6 @@ body {
   width: 100%;
   padding: 15px 30px 15px 100px;
 }
+a {
+  cursor: pointer;
+}
