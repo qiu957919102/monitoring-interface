@@ -3,6 +3,7 @@ body {
   background: $base-dark;
   font-family: 'Muli', sans-serif;
   color: $text;
+  position: relative;
 }
 .wrapper {
   display: flex;
@@ -14,4 +15,131 @@ body {
 }
 a {
   cursor: pointer;
+}
+.mask {
+  position: absolute;
+  display: table;
+  background: $base-dark;
+  opacity: 0.8;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+.loader {
+  display: table-cell;
+  vertical-align: middle;
+}
+.loader .circle {
+  margin: 0 auto;
+  width: 130px;
+  height: 130px;
+  font-size: 14px;
+  border-top: 2px solid $base-green;
+  border-bottom: 2px solid $base-green;
+  border-right: 2px solid $base-dark;
+  border-left: 2px solid $base-dark;
+  border-radius: 50%;
+  padding-top: 55px;
+  text-align: center;
+  position: relative;
+}
+.loader .circle:after {
+  content: '';
+  position: absolute;
+  top: 9%;
+  left: 9%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border-top: 2px solid $base-green;
+  border-bottom: 2px solid $base-green;
+  border-right: 2px solid $base-dark;
+  border-left: 2px solid $base-dark;
+  animation: circle-green infinite;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+  transform: rotate(0deg);
+}
+.loader .circle:before {
+  content: '';
+  position: absolute;
+  top: 4%;
+  left: 4%;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  border-top: 2px solid $base-dark;
+  border-bottom: 2px solid $base-dark;
+  border-right: 2px solid $text-accent;
+  border-left: 2px solid $text-accent;
+  animation: circle-grey infinite;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+  transform: rotate(0deg);
+}
+@-moz-keyframes circle-green {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes circle-green {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes circle-green {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes circle-green {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes circle-grey {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@-webkit-keyframes circle-grey {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@-o-keyframes circle-grey {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes circle-grey {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }
