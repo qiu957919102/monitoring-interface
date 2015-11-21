@@ -1,4 +1,4 @@
-requirejs(['sidebar', 'activity'], function (SideBar, Activity) {
+requirejs(['sidebar', 'activity', 'history'], function (SideBar, Activity, History) {
 	var Layout = React.createClass({displayName: "Layout",
 		_wsMessageHandlers: {},
 		_deferredMessages: [],
@@ -53,6 +53,11 @@ requirejs(['sidebar', 'activity'], function (SideBar, Activity) {
 			}
 
 			this._wsMessageHandlers[action].push(handler);
+			return this._wsMessageHandlers[action].length - 1;
+		},
+
+		removeWsMessageHandler: function (action, id) {
+			delete this._wsMessageHandlers[action][id];
 		},
 
 		sendWsMessage: function (action, data) {

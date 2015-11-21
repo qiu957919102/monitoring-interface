@@ -129,29 +129,43 @@ define(function () {
 
 	return React.createClass({
 		_wsInterval: null,
+		_wsMessageHandlerId: null,
 
 		getInitialState: function() {
 			return { activities: [] };
 		},
 
-		componentDidMount: function () {
-			var startPolling = function () {
-				this._wsInterval = setInterval(this.props.layout.sendWsMessage.bind(this.props.layout, 'activities'), 1000);
-			}.bind(this);
+		_startPolling: function () {
+			this._wsInterval = setInterval(
+				this.props.layout.sendWsMessage.bind(this.props.layout, 'activities'),
+				1000
+			);
+		},
 
-			this.props.layout.handleWsMessage('activities', function (data) {
+		_stopPolling: function () {
+			if (this._wsInterval) {
+				clearInterval(this._wsInterval);
+			}
+		},
+
+		_handleWsMessage: function () {
+			this._wsMessageHandlerId = this.props.layout.handleWsMessage('activities', function (data) {
 				this.setState({ activities: data });
 
 				if (!this._wsInterval) {
-					startPolling();
+					this._startPolling();
 				}
 			}.bind(this));
+		},
 
-			if (this.props.layout.isWsOpened()) {
-				startPolling();
-			} else {
-				this.props.layout.sendWsMessage('activities');
-			}
+		componentWillMount: function () {
+			this._handleWsMessage();
+			this.props.layout.sendWsMessage('activities');
+		},
+
+		componentWillUnmount: function () {
+			this._stopPolling();
+			this.props.layout.removeWsMessageHandler('activities', this._wsMessageHandlerId);
 		},
 
 		render: function () {

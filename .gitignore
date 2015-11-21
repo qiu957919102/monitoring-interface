@@ -1,2 +1,4 @@
 node_modules/
-js/.module-cache/
+js/
+styles/css/
+style.css
