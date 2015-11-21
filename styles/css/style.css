@@ -480,9 +480,6 @@ a {
 .progress-bar.stuck .progress .active2 {
   background: #fa9400;
 }
-#history-page {
-  display: none;
-}
 .buttongroup {
   *zoom: 1;
 }
