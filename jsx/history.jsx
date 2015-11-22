@@ -1,5 +1,13 @@
 define(function() {
 	return React.createClass({
+		componentDidMount: function () {
+			this.props.layout.hideLoader();
+		},
+
+		componentWillUnmount: function () {
+			this.props.layout.showLoader();
+		},
+
 		render: function () {
 			return (
 				<div id="history-page" className="history">

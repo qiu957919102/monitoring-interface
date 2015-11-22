@@ -3,32 +3,68 @@ requirejs(['sidebar', 'activity', 'history'], function (SideBar, Activity, Histo
 		_wsMessageHandlers: {},
 		_deferredMessages: [],
 		_wsOpened: false,
+		_lastState: {},
+
+		_establishWsConnect: function () {
+			this._ws = new WebSocket('ws://' + location.hostname + ':8082');
+
+			this._ws.onclose = this._onWsConnectClose;
+			this._ws.onerror = this._onWsConnectError;
+			this._ws.onmessage = this._onWsMessage;
+			this._ws.onopen = this._onWsConnectOpen;
+		},
+
+		_onWsConnectError: function () {
+			setTimeout(this._establishWsConnect, 5000);
+		},
+
+		_onWsConnectClose: function () {
+			if (!this._wsOpened) {
+				return;
+			}
+
+			this._wsOpened = false;
+			this._lastState.activeTab = this.state.activeTab;
+			this.setState({ activeTab: '' });
+			this.showLoader();
+
+			setTimeout(function () {
+				this._establishWsConnect();
+			}.bind(this), 3000);
+		},
+
+		_onWsConnectOpen: function () {
+			if (this._wsOpened) {
+				return;
+			}
+
+			this._wsOpened = true;
+
+			if (this._lastState.activeTab) {
+				this.setState({ activeTab: this._lastState.activeTab });
+			}
+
+			this._sendDeferredMessages();
+		},
 
 		getInitialState: function() {
 			return { activeTab: 'activity' };
 		},
 
 		componentDidMount: function () {
-			this._ws = new WebSocket('ws://' + location.hostname + ':8082');
+			this._establishWsConnect();
+		},
 
-			this._ws.onclose = function (event) {
-				this._wsOpened = false;
+		_switchLoader: function (isVisible) {
+			document.getElementById('loader').style.display = isVisible ? 'table' : 'none';
+		},
 
-				if (!event.wasClean) {
-					alert('WebSocket connection has been closed abnormally [' + event.code + ']: ' + event.reason);
-				}
-			};
+		showLoader: function () {
+			this._switchLoader(true);
+		},
 
-			this._ws.onerror = function (error) {
-			  alert('WebSocket error: ' + error.message);
-			};
-
-			this._ws.onmessage = this._onWsMessage;
-
-			this._ws.onopen = function () {
-				this._wsOpened = true;
-				this._sendDeferredMessages();
-			}.bind(this);
+		hideLoader: function () {
+			this._switchLoader(false);
 		},
 
 		_onWsMessage: function (event) {
@@ -104,6 +140,9 @@ requirejs(['sidebar', 'activity', 'history'], function (SideBar, Activity, Histo
 				case 'statistics':
 					content = <Statistics layout={this} />;
 				break;
+
+				default:
+					content = '';
 			}
 
 			return (
