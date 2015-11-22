@@ -37,4 +37,5 @@ gulp.task('watch', function() {
     gulp.watch(paths.css, ['minify-css']);
     gulp.watch(paths.scripts);
 });
-gulp.task('default', ['stylus', 'minify-css', 'watch']);
+
+gulp.task('default', ['stylus', 'minify-css', 'react']);
