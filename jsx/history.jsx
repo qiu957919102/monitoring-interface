@@ -1,11 +1,36 @@
 define(function() {
 	var Tabs = React.createClass({
+		getInitialState: function () {
+			return { tab: 'finished' };
+		},
+
+		selectFinishedTab: function () {
+			this.setState({ tab: 'finished' });
+			this.props.history.setActiveTab('finished');
+		},
+
+		selectFailedTab: function () {
+			this.setState({ tab: 'failed' });
+			this.props.history.setActiveTab('failed');
+		},
+
+		selectTimedOutTab: function () {
+			this.setState({ tab: 'timedOut' });
+			this.props.history.setActiveTab('timedOut');
+		},
+
 		render: function () {
+			var
+				isFinishedSelected = this.state.tab == 'finished',
+				isFailedSelected = this.state.tab == 'failed',
+				isTimedOutSelected = this.state.tab = 'timedOut'
+			;
+
 			return (
 				<div className="buttongroup">
-					<button type="button" data-selected="true" className="transparent-button first">All</button>
-					<button type="button" data-selected="false" className="transparent-button">Normal</button>
-					<button type="button" data-selected="false" className="transparent-button last">Errors</button>
+					<button type="button" data-selected="false" className="transparent-button first" onClick={this.selectFinishedTab}>Finished</button>
+					<button type="button" data-selected="false" className="transparent-button" onClick={this.selectFailedTab}>Failed</button>
+					<button type="button" data-selected="false" className="transparent-button last" onClick={this.selectTimedOutTab}>Timed out</button>
 				</div>
 			);
 		}
@@ -79,9 +104,15 @@ define(function() {
 	return React.createClass({
 		_wsMessageHandlerId: null,
 		_isFirstWsMessage: true,
+		_activeTab: 'finished',
 
 		getInitialState: function() {
 			return { history: [] };
+		},
+
+		setActiveTab: function (activeTab) {
+			this._activeTab = activeTab;
+			this._sendMessage();
 		},
 
 		_wsMessageHandler: function (data) {
@@ -91,7 +122,11 @@ define(function() {
 			}
 
 			this.setState({ history: data });
-			setTimeout(this.props.layout.sendWsMessage.bind(this.props.layout, 'history', { status: 'finished' }), 5000);
+			setTimeout(this._sendMessage.bind(this), 5000);
+		},
+
+		_sendMessage: function () {
+			this.props.layout.sendWsMessage('history', { status: this._activeTab });
 		},
 
 		_handleWsMessage: function () {
@@ -100,7 +135,7 @@ define(function() {
 
 		componentWillMount: function () {
 			this._handleWsMessage();
-			this.props.layout.sendWsMessage('history', { status: 'finished' });
+			this.props.layout.sendWsMessage('history', { status: this._activeTab });
 		},
 
 		componentWillUnmount: function () {
@@ -111,7 +146,7 @@ define(function() {
 		render: function () {
 			return (
 				<div id="history-page" className="history">
-					<Tabs />
+					<Tabs history={this} />
 					<History items={this.state.history} layout={this.props.layout} />
 				</div>
 			);
