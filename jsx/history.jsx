@@ -21,16 +21,16 @@ define(function() {
 
 		render: function () {
 			var
-				isFinishedSelected = this.state.tab == 'finished',
-				isFailedSelected = this.state.tab == 'failed',
-				isTimedOutSelected = this.state.tab = 'timedOut'
+				isFinishedSelected = (this.state.tab == 'finished').toString(),
+				isFailedSelected = (this.state.tab == 'failed').toString(),
+				isTimedOutSelected = (this.state.tab == 'timedOut').toString()
 			;
 
 			return (
 				<div className="buttongroup">
-					<button type="button" data-selected="false" className="transparent-button first" onClick={this.selectFinishedTab}>Finished</button>
-					<button type="button" data-selected="false" className="transparent-button" onClick={this.selectFailedTab}>Failed</button>
-					<button type="button" data-selected="false" className="transparent-button last" onClick={this.selectTimedOutTab}>Timed out</button>
+					<button type="button" data-selected={isFinishedSelected} className="transparent-button first" onClick={this.selectFinishedTab}>Finished</button>
+					<button type="button" data-selected={isFailedSelected} className="transparent-button" onClick={this.selectFailedTab}>Failed</button>
+					<button type="button" data-selected={isTimedOutSelected} className="transparent-button last" onClick={this.selectTimedOutTab}>Timed out</button>
 				</div>
 			);
 		}
