@@ -1,24 +1,5 @@
 define(function () {
 	var ActivityItem = React.createClass({
-		_normalizeSize: function (size, units) {
-			if (!units) {
-				units = ['B', 'KB', 'MB', 'GB'];
-			}
-
-			var curUnit = 0;
-
-			while (size > 1000) {
-				curUnit++;
-				size = (size / 1000).toFixed(2);
-			}
-
-			return size + ' ' + units[curUnit];
-		},
-
-		_normalizeSpeed: function (speed) {
-			return this._normalizeSize(speed * 8, ['bits', 'kbit/s', 'Mbit/s', 'Gbit/s' /* lol, Gbit/s */]);
-		},
-
 		_formatData: function (activity) {
 			var whatIsIt;
 
@@ -36,11 +17,11 @@ define(function () {
 			}
 
 			return {
-				speed: this._normalizeSpeed(activity.speed),
+				speed: this.props.layout._normalizeSpeed(activity.speed),
 				isStuck: new Date() - new Date(activity.updated) > 30000,
 				isHanged: new Date() - new Date(activity.updated) > 480000,
-				size: this._normalizeSize(activity.size),
-				left: this._normalizeSize(activity.size - activity.received),
+				size: this.props.layout._normalizeSize(activity.size),
+				left: this.props.layout._normalizeSize(activity.size - activity.received),
 				percent: Math.round(activity.received / (activity.size / 100)),
 				started: new Date(activity.started).toLocaleString(),
 				updated: new Date(activity.updated).toLocaleString(),
@@ -118,8 +99,8 @@ define(function () {
 	var ActivityList = React.createClass({
 		render: function () {
 			var activities = this.props.activities.map(function (activity) {
-				return <ActivityItem key={activity.uuid} activity={activity} />
-			});
+				return <ActivityItem key={activity.uuid} activity={activity} layout={this.props.layout} />
+			}.bind(this));
 
 			return (
 				<ul id="active-items-list" className="active__list">{activities}</ul>
@@ -162,7 +143,7 @@ define(function () {
 		render: function () {
 			return (
 				<div id="active" className="active">
-					<ActivityList activities={this.state.activities} />
+					<ActivityList activities={this.state.activities} layout={this.props.layout} />
 				</div>
 			);
 		}

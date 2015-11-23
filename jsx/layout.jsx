@@ -5,6 +5,25 @@ requirejs(['sidebar', 'activity', 'history'], function (SideBar, Activity, Histo
 		_wsOpened: false,
 		_lastState: {},
 
+		_normalizeSize: function (size, units) {
+			if (!units) {
+				units = ['B', 'KB', 'MB', 'GB'];
+			}
+
+			var curUnit = 0;
+
+			while (size > 1000) {
+				curUnit++;
+				size = (size / 1000).toFixed(2);
+			}
+
+			return size + ' ' + units[curUnit];
+		},
+
+		_normalizeSpeed: function (speed) {
+			return this._normalizeSize(speed * 8, ['bits', 'kbit/s', 'Mbit/s', 'Gbit/s' /* lol, Gbit/s */]);
+		},
+
 		_establishWsConnect: function () {
 			this._ws = new WebSocket('ws://' + location.hostname + ':8082');
 
@@ -146,7 +165,7 @@ requirejs(['sidebar', 'activity', 'history'], function (SideBar, Activity, Histo
 			}
 
 			return (
-				<div>
+				<div className="wrapper2">
 					<SideBar layout={this} activeTab={this.state.activeTab} />
 
 					<div className="content">
